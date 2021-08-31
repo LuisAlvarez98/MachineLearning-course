@@ -56,7 +56,7 @@ class LinearRegressor():
 
     def fit(self, X, y):
         """
-        Fits the linear regressor to the values in the dataset
+        Fits the linear regressor to the values in the dataset.
         X: is an (n x m) vector, where n is the number of features and m is the number of samples/examples
         y: is an (1 x m) vector, where m is the number of samples/examples
 
