@@ -46,8 +46,13 @@ class LinearRegressor():
 
         TODO: You must implement the calculation of derivatives. An (n x 1) array that corresponds to the gradient of current theta values (the derivative per theta parameter) must be returned.
         """
-        empty_derivatives = np.zeros((X.shape[0],1))
-        return empty_derivatives
+
+        temp = y_pred - y # (1 x m)
+
+        temp2 = np.dot(temp, X.T) # (1 x m) * (m x n) = (1 x n)
+
+        gradient = self.theta - self.alpha * (temp2 / m)
+        return gradient
 
     def fit(self, X, y):
         """
@@ -65,15 +70,14 @@ class LinearRegressor():
 
         for i in range(self.epochs):
             # Get predictions
-            # y_pred = ...
+            y_pred = predict(X)
 
             # calculate cost
-            # cost = ...
-            cost = 0
+            cost = _cost_function(y_pred, y, m)
             
 
             # gradient is an (n) x 1 array, it refers to the derivate per theta
-            # gradient = ...
+            gradient = _cost_function_derivative(y_pred, y, X, m):
 
             # delta/update rule
             # self.theta = ...
