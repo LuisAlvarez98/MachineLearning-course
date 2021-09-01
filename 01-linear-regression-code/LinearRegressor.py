@@ -19,10 +19,9 @@ class LinearRegressor():
 
         TODO: You must implement the cost function and return an scalar that corresponds to the error produced by the Linear Regressor with its current configuration
         """
-        cost = 0
         temp = y_pred - y 
-        cost = np.dot(temp, temp.T)
-        return 1/2*m * cost
+        cost : np.ndarray = np.dot(temp, temp.T)
+        return (cost.flatten()[0])/(2*m)
 
     def _hypothesis(self, X):
         """
@@ -34,7 +33,7 @@ class LinearRegressor():
         # * is element wise multiplication
         # numpy.dot(), or @ operator will work
 
-        return np.dot(self.theta, X)
+        return np.dot(self.theta.T, X)
 
     def _cost_function_derivative(self, y_pred, y, X, m):
         """
@@ -49,10 +48,9 @@ class LinearRegressor():
 
         temp = y_pred - y # (1 x m)
 
-        temp2 = np.dot(temp, X.T) # (1 x m) * (m x n) = (1 x n)
+        temp = np.dot(temp,X.T) # (1 x m) * (m x n) = (1 x n)
 
-        gradient = self.theta - self.alpha * (temp2 / m)
-        return gradient
+        return (self.alpha/m) * temp.T # scalar * (n x 1)
 
     def fit(self, X, y):
         """
@@ -68,19 +66,19 @@ class LinearRegressor():
         # theta is (nx1) (one theta per dimension)
         self.theta = np.random.uniform(-10, 10, (n, 1))
 
-        for i in range(self.epochs):
+        for _ in range(self.epochs):
             # Get predictions
-            y_pred = predict(X)
+            y_pred = self.predict(X)
 
             # calculate cost
-            cost = _cost_function(y_pred, y, m)
+            cost = self._cost_function(y_pred, y, m)
             
 
             # gradient is an (n) x 1 array, it refers to the derivate per theta
-            gradient = _cost_function_derivative(y_pred, y, X, m):
+            gradient = self._cost_function_derivative(y_pred, y, X, m)
 
             # delta/update rule
-            # self.theta = ...
+            self.theta = self.theta - gradient
 
             self.costs.append(cost)
             pass
@@ -97,5 +95,4 @@ class LinearRegressor():
         """
 
         # ! You could simply call the hypothesis here
-        empty_predictions = np.zeros((1,X.shape[1]))
-        return empty_predictions
+        return self._hypothesis(X)

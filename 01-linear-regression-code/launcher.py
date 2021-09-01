@@ -12,6 +12,7 @@ if __name__ == "__main__":
     epochs = 50000
 
     # Reading the dataset
+    # X, y = read_dataset('01-linear-regression-code/01-sea-temperature.csv')
     X, y = read_dataset('01-sea-temperature.csv')
 
     # First run without mean normalization
