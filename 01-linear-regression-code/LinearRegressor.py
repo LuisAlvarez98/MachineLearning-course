@@ -1,5 +1,8 @@
 import numpy as np
+from progressbar import progressbar, streams
 
+# Setup Progressbar wrapper function
+streams.wrap_stderr()
 
 class LinearRegressor():
     def __init__(self, alpha=0.1, epochs=1):
@@ -66,7 +69,7 @@ class LinearRegressor():
         # theta is (nx1) (one theta per dimension)
         self.theta = np.random.uniform(-10, 10, (n, 1))
 
-        for _ in range(self.epochs):
+        for _ in progressbar(range(self.epochs)):
             # Get predictions
             y_pred = self.predict(X)
 
@@ -75,7 +78,10 @@ class LinearRegressor():
             
 
             # gradient is an (n) x 1 array, it refers to the derivate per theta
-            gradient = self._cost_function_derivative(y_pred, y, X, m)
+            gradient : np.ndarray = self._cost_function_derivative(y_pred, y, X, m)
+
+            if(gradient.shape != (2,1)):
+                print("What the Fuck?")
 
             # delta/update rule
             self.theta = self.theta - gradient
