@@ -1,3 +1,13 @@
+"""
+Modified by:
+- Jesús Omar Cuenca Espino    A01378844
+- Luis Felipe Alvarez Sanchez A01194173
+- Juan José González Andrews  A01194101
+- Rodrigo Montemayor Faudoa   A00821976
+
+Date: 03/09/2021
+"""
+
 from sklearn.linear_model import LinearRegression
 
 import numpy as np

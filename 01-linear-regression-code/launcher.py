@@ -1,3 +1,13 @@
+"""
+Modified by:
+- Jesús Omar Cuenca Espino    A01378844
+- Luis Felipe Alvarez Sanchez A01194173
+- Juan José González Andrews  A01194101
+- Rodrigo Montemayor Faudoa   A00821976
+
+Date: 03/09/2021
+"""
+
 from prediction import predict_within_normalized_values
 from utils import add_ones, mean_normalization, plot_costs, plot_result, read_dataset
 from LinearRegressor import LinearRegressor
