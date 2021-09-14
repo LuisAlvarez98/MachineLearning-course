@@ -1,3 +1,13 @@
+"""
+Modified by:
+- Jesús Omar Cuenca Espino    A01378844
+- Luis Felipe Alvarez Sanchez A01194173
+- Juan José González Andrews  A01194101
+- Rodrigo Montemayor Faudoa   A00821976
+
+Date: 14/09/2021
+"""
+
 from utils import add_ones, plot_costs, plot_decision_boundary, read_dataset
 from LogisticRegressor import LogisticRegressor
 import pandas as pd
