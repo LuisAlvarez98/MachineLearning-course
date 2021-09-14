@@ -1,4 +1,8 @@
 import numpy as np
+from progressbar import progressbar, streams
+
+# Setup Progressbar wrapper function
+streams.wrap_stderr()
 
 
 class LogisticRegressor():
@@ -18,7 +22,7 @@ class LogisticRegressor():
         self.costs = []
         self.theta = None
 
-    def _cost_function(self, hyp, y):
+    def _cost_function(self, hyp, y) -> float:
         """
         Calculates the cost function (error) for the predicted values (hyp) when compared against the right labels (y).
         hyp: the values predicted by the current configuration of the LR
@@ -75,19 +79,20 @@ class LogisticRegressor():
         # self.theta is an (n x 1) vector (one per feature)
         self.theta = np.random.uniform(-10, 10, (n, 1))
 
-        for i in range(self.epochs):
+        for _ in progressbar(range(self.epochs)):
             # Get predictions
-            # hyp = ...   # hyp is (1xm) vector
+            hyp = self.predict(X)
 
             # Calculate cost
-            # cost = ...      # cost is a scalar
-            cost = 0
+            # calculate cost
+            cost = self._cost_function(hyp, y, m)
 
             # get gradient, an (nx1) array
-            # gradient = ...
+            gradient : np.ndarray = self._cost_function_derivative(hyp, y, X, m)
             
             # delta/update rule
-            # self.theta = ...
+            self.theta = self.theta - gradient
+
             self.costs.append(cost)
 
         print("Final theta is {} (cost: {})".format(self.theta.T, cost))

@@ -4,6 +4,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+STANDARD_ALPHA = 0.001
+STANDARD_EPOCHS = 50000
+
 if __name__ == "__main__":
     # To generate same results
     np.random.seed(0)
@@ -14,8 +17,8 @@ if __name__ == "__main__":
     X_with_ones = add_ones(X)
 
     # Setting hyperparameters
-    alpha = 0.001
-    epochs = 50000
+    alpha = STANDARD_ALPHA
+    epochs = STANDARD_EPOCHS
 
     # Creating regressor
     lr = LogisticRegressor(alpha, epochs)
@@ -43,8 +46,8 @@ if __name__ == "__main__":
     X_with_ones, y = read_dataset('dataset-2-modified.csv')
     
     # Setting hyperparameters
-    alpha = 0.001
-    epochs = 5000
+    alpha = STANDARD_ALPHA
+    epochs = STANDARD_EPOCHS // 10
     
     # Creating regressor
     lr = LogisticRegressor(alpha, epochs, regularize=True)
