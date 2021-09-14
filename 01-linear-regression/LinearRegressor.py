@@ -90,9 +90,6 @@ class LinearRegressor():
             # gradient is an (n) x 1 array, it refers to the derivate per theta
             gradient : np.ndarray = self._cost_function_derivative(y_pred, y, X, m)
 
-            if(gradient.shape != (2,1)):
-                print("What the Fuck?")
-
             # delta/update rule
             self.theta = self.theta - gradient
 
