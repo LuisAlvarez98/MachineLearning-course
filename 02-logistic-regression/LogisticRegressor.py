@@ -43,10 +43,12 @@ class LogisticRegressor():
         This returns an scalar
         """
         m = len(y)
+        temp1 = -1 / m * np.dot(y, np.log(hyp)) + np.dot(1 - y, np.log(1 - hyp))  
 
-        # if self.regularize:
-        #     Here you would know there is something else to do
-        return 0
+        if self.regularize:
+            temp1 += (self.reg_factor / 2 * m) * np.dot(self.theta, self.theta.T)
+
+        return temp1
 
     def _cost_function_derivative(self, y_pred, y, X, m):
         """
@@ -71,8 +73,8 @@ class LogisticRegressor():
 
         TODO: Implement this function to return a (1 x m) array with the list of predictions for each sample
         """
-        emptyResult = np.zeros((1, X.shape[1]))
-        return emptyResult
+        temp = np.dot(self.theta.T, X)
+        return 1 / (1 + np.exp(-temp))
 
     def fit(self, X, y):
         """
