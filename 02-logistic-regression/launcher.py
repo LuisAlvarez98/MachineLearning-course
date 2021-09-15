@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     # First run (dataset-1)
     # Reading the dataset
-    X, y = read_dataset('dataset-1.csv')
+    X, y = read_dataset('./dataset-1.csv')
     X_with_ones = add_ones(X)
 
     # Setting hyperparameters
@@ -53,20 +53,21 @@ if __name__ == "__main__":
     # Second run (dataset-2-adjusted.csv)
     
     # Reading the dataset
-    X_with_ones, y = read_dataset('dataset-2-modified.csv')
+    X_with_ones, y = read_dataset('./dataset-2-modified.csv')
     
     # Setting hyperparameters
     alpha = STANDARD_ALPHA
     epochs = STANDARD_EPOCHS // 10
     
     # Creating regressor
-    lr = LogisticRegressor(alpha, epochs, regularize=True)
+    # lr = LogisticRegressor(alpha, epochs, regularize=True, reg_factor=0.1)
+    lr = LogisticRegressor(alpha, epochs, regularize=True, reg_factor=0.00001)
     
     # Fitting
     lr.fit(X_with_ones, y)
     
     # Associated plots
-    original_x, _ = read_dataset('dataset-2.csv')
+    original_x, _ = read_dataset('./dataset-2.csv')
     original_x = add_ones(original_x)
     plot_decision_boundary(
         original_x.T, y.T, lr, "LogisticRegressor alpha={} epochs={}".format(alpha, epochs), is_polynomial=True)
