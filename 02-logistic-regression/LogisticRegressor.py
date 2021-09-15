@@ -42,45 +42,45 @@ class LogisticRegressor():
         Recall that the LR might be set to perform regularization, so you must have two cases: one for when regularization is required and one for when it is not.
         This returns an scalar
         """
-        m = len(y)
+        m = y.size
 
-        # if self.regularize:
-        #     Here you would know there is something else to do
-        return 0
+        cost = -1/m
+        tempA = np.dot(y, np.log(hyp).T)
+        tempB = np.dot((1 - y), np.log((1 - hyp)).T)
+        cost *= (tempA + tempB).flatten()[0]
 
-    def _cost_function_derivative(self, y_pred, y, X, m):
+        if(self.regularize):
+            regulator = (np.dot(self.theta, self.theta.T)).flatten()
+            cost += (self.reg_factor/(2*m))*regulator[0]
+
+        return cost
+
+    def _cost_function_derivative(self, hyp, y, X, m):
         """
         Calculates the derivative (gradient) of the cost funcion. It supports the case for regularization.
 
-        y_pred: the predicted values
+        hyp: the predicted values
         y: the target class (right values) for the data
         X: the input dataset
         m: the number of examples in the dataset
 
-        TODO: implement this function to return an (n x 1) array that includes the derivative per feature (n is the num of features).
-        Your implementation must support regularization, so you will have two cases here, one for when regularization is requested and another one for when it is not.
-
         """
-        empty_derivatives = np.zeros((X.shape[0], 1))
-        return empty_derivatives
+        return (np.dot(hyp - y,X.T)).T/m
+        
 
-    def _hypothesis(self, X):
+    def _hypothesis(self, X) -> np.ndarray :
         """
         Calculates the hypothesis for the given dataset using the current LR configuration (theta parameters). This is the sigmoid function.
         X: the dataset to employ. It is an (n x m) array.
-
-        TODO: Implement this function to return a (1 x m) array with the list of predictions for each sample
         """
-        emptyResult = np.zeros((1, X.shape[1]))
-        return emptyResult
 
+        return 1/(1 + np.exp(-np.dot(self.theta.T,X)))
+        
     def fit(self, X, y):
         """
         Fits the Logistic Regressor to the values in the dataset
         X: is an (n x m) vector, where n is the number of features and m is the number of samples/examples
         y: is an (1 x m) vector, where m is the number of samples/examples
-
-        TODO: You need to provide an implementation that in each epoch is updating the values for the theta parameters by using the hypothesis and cost function functions.
         """
 
         # m is the number of samples, n is the number of features, y is (1 x m)
@@ -94,14 +94,13 @@ class LogisticRegressor():
             hyp = self.predict(X)
 
             # Calculate cost
-            # calculate cost
-            cost = self._cost_function(hyp, y, m)
+            cost = self._cost_function(hyp, y)
 
             # get gradient, an (nx1) array
             gradient : np.ndarray = self._cost_function_derivative(hyp, y, X, m)
             
             # delta/update rule
-            self.theta = self.theta - gradient
+            self.theta = self.theta - self.alpha*gradient
 
             self.costs.append(cost)
 
@@ -112,10 +111,14 @@ class LogisticRegressor():
         Predicts the classes for the samples in the dataset X.
 
         X: an (n x m') array with the dataset to predict, m' samples of n dimensions.
-
-        TODO: Implement this function to predict the class for the dataset X. You must return a (1 x m) array of 0|1. 
-        The np.where function could be useful here to transform all outputs larger than 0.5 to 1.
         """
-        empty_predictions = np.zeros((1,X.shape[1]))
-        return empty_predictions
+
+        THRESHOLD = 0.5
+
+        hyp = self._hypothesis(X)
+
+        # hyp[hyp > THRESHOLD] = 1
+        # hyp[hyp <= THRESHOLD]= 0
+
+        return hyp
         
