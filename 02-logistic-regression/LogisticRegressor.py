@@ -11,12 +11,11 @@ Date: 14/09/2021
 import numpy as np
 from progressbar import progressbar, streams
 
-# Setup Progressbar wrapper function
+# Setup Progressbar
 streams.wrap_stderr()
 
-
 class LogisticRegressor():
-    def __init__(self, alpha=0.1, epochs=1, regularize=False, reg_factor=0.1):
+    def __init__(self, alpha=0.1, epochs=1, regularize=False, reg_factor=0.001):
         """
         Constructor
 
@@ -32,26 +31,20 @@ class LogisticRegressor():
         self.costs = []
         self.theta = None
 
-    def _cost_function(self, hyp, y) -> float:
+    def _cost_function(self, hyp, y,m):
         """
         Calculates the cost function (error) for the predicted values (hyp) when compared against the right labels (y).
         hyp: the values predicted by the current configuration of the LR
         y: the correct labels
-
-        TODO: Implement this function to calculate the cost value for the LR. 
-        Recall that the LR might be set to perform regularization, so you must have two cases: one for when regularization is required and one for when it is not.
-        This returns an scalar
         """
-        m = y.size
 
-        cost = -1/m
-        tempA = np.dot(y, np.log(hyp).T)
-        tempB = np.dot((1 - y), np.log((1 - hyp)).T)
-        cost *= (tempA + tempB).flatten()[0]
+        tempA = np.dot(y, (np.log(hyp)).T)
+        tempB = np.dot((1-y), (np.log(1 - hyp)).T)
 
-        if(self.regularize):
-            regulator = (np.dot(self.theta, self.theta.T)).flatten()
-            cost += (self.reg_factor/(2*m))*regulator[0]
+        cost = -(1/m) * np.sum( tempA + tempB )
+
+        if self.regularize:
+            cost += (self.reg_factor / (2 * m)) * np.sum(np.dot(self.theta, self.theta.T))
 
         return cost
 
@@ -65,17 +58,24 @@ class LogisticRegressor():
         m: the number of examples in the dataset
 
         """
-        return (np.dot(hyp - y,X.T)).T/m
-        
+        derivatives = np.dot((hyp - y),X.T)
+        cost_derivatives = (1/m) * derivatives.T 
 
-    def _hypothesis(self, X) -> np.ndarray :
+        if(self.regularize):
+            cost_derivatives += np.sum((self.reg_factor / m) * self.theta)
+
+        return cost_derivatives
+
+    def _hypothesis(self, X):
         """
         Calculates the hypothesis for the given dataset using the current LR configuration (theta parameters). This is the sigmoid function.
         X: the dataset to employ. It is an (n x m) array.
         """
-
-        return 1/(1 + np.exp(-np.dot(self.theta.T,X)))
         
+        z = np.dot(self.theta.T,X)
+        hyp = 1/(1+np.exp(-z))
+        return hyp
+
     def fit(self, X, y):
         """
         Fits the Logistic Regressor to the values in the dataset
@@ -91,14 +91,14 @@ class LogisticRegressor():
 
         for _ in progressbar(range(self.epochs)):
             # Get predictions
-            hyp = self.predict(X)
+            hyp = self._hypothesis(X)
 
             # Calculate cost
-            cost = self._cost_function(hyp, y)
+            # cost = self._cost_function(hyp, y, m)
+            cost = self._cost_function(hyp, y, len(y))
 
             # get gradient, an (nx1) array
-            gradient : np.ndarray = self._cost_function_derivative(hyp, y, X, m)
-            
+            gradient = self._cost_function_derivative(hyp, y, X, m)
             # delta/update rule
             self.theta = self.theta - self.alpha*gradient
 
@@ -117,8 +117,4 @@ class LogisticRegressor():
 
         hyp = self._hypothesis(X)
 
-        # hyp[hyp > THRESHOLD] = 1
-        # hyp[hyp <= THRESHOLD]= 0
-
-        return hyp
-        
+        return np.where(hyp < THRESHOLD, 0, 1)

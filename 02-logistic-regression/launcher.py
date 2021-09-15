@@ -60,7 +60,8 @@ if __name__ == "__main__":
     epochs = STANDARD_EPOCHS // 10
     
     # Creating regressor
-    lr = LogisticRegressor(alpha, epochs, regularize=True)
+    # lr = LogisticRegressor(alpha, epochs, regularize=True, reg_factor=0.1)
+    lr = LogisticRegressor(alpha, epochs, regularize=True, reg_factor=0.00001)
     
     # Fitting
     lr.fit(X_with_ones, y)
