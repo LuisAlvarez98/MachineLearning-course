@@ -10,14 +10,13 @@ Date: 14/09/2021
 
 from utils import add_ones, plot_costs, plot_decision_boundary, read_dataset
 from LogisticRegressor import LogisticRegressor
-import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
 STANDARD_ALPHA = 0.001
 STANDARD_EPOCHS = 50000
 
-if __name__ == "__main__":
+def part1(alpha : float, epochs : float, reg_factor = None):
     # To generate same results
     np.random.seed(0)
 
@@ -26,12 +25,10 @@ if __name__ == "__main__":
     X, y = read_dataset('./dataset-1.csv')
     X_with_ones = add_ones(X)
 
-    # Setting hyperparameters
-    alpha = STANDARD_ALPHA
-    epochs = STANDARD_EPOCHS
+    reg = reg_factor != None
 
     # Creating regressor
-    lr = LogisticRegressor(alpha, epochs)
+    lr = LogisticRegressor(alpha, epochs, regularize=reg, reg_factor=(reg_factor if reg else -1.0))
 
     # Fitting
     lr.fit(X_with_ones, y)
@@ -47,7 +44,7 @@ if __name__ == "__main__":
     y_pred = lr.predict(X_test)
     print('{} predicted as {} (was {})'.format(X_test, y_pred, y[:, idx]))
 
-
+def part2(alpha : float, epochs : float, reg_factor = None):
     # To generate same results
     np.random.seed(0)
     # Second run (dataset-2-adjusted.csv)
@@ -56,12 +53,10 @@ if __name__ == "__main__":
     X_with_ones, y = read_dataset('./dataset-2-modified.csv')
     
     # Setting hyperparameters
-    alpha = STANDARD_ALPHA
-    epochs = STANDARD_EPOCHS // 10
+    reg = reg_factor != None
     
     # Creating regressor
-    # lr = LogisticRegressor(alpha, epochs, regularize=True, reg_factor=0.1)
-    lr = LogisticRegressor(alpha, epochs, regularize=True, reg_factor=0.00001)
+    lr = LogisticRegressor(alpha, epochs, regularize=reg, reg_factor=(reg_factor if reg else -1.0))
     
     # Fitting
     lr.fit(X_with_ones, y)
@@ -79,4 +74,24 @@ if __name__ == "__main__":
     y_pred = lr.predict(X_test)
     print('{} predicted as {} (was {})'.format(X_test, y_pred, y[:, idx]))
 
-    plt.show()
+if __name__ == "__main__":
+    
+
+    ## Optimal Values
+    part1(alpha=STANDARD_ALPHA, epochs=int(np.floor(STANDARD_EPOCHS * 2)))
+
+    ## Experiments
+    # part1(alpha=STANDARD_ALPHA, epochs=STANDARD_EPOCHS // 10, reg_factor=0.0001)
+
+    separator = " experimento parte 2 ".upper().center(50,"=")
+
+    print(f"\n{separator}\n")
+
+    ## Optimal Values
+    # part2(alpha=0.01, epochs=STANDARD_EPOCHS, reg_factor=0.1)
+
+    ## Experiments
+    part2(alpha=0.01, epochs=STANDARD_EPOCHS, reg_factor=0.1)
+    
+
+    # plt.show()

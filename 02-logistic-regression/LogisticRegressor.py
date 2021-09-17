@@ -94,8 +94,8 @@ class LogisticRegressor():
             hyp = self._hypothesis(X)
 
             # Calculate cost
-            # cost = self._cost_function(hyp, y, m)
-            cost = self._cost_function(hyp, y, len(y))
+            cost = self._cost_function(hyp, y, m)
+            # cost = self._cost_function(hyp, y, len(y))
 
             # get gradient, an (nx1) array
             gradient = self._cost_function_derivative(hyp, y, X, m)
