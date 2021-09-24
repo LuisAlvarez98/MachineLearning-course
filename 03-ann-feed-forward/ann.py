@@ -1,3 +1,10 @@
+"""
+Modified/Updated by:
+- Jesús Omar Cuenca Espino (JOmarCuenca)
+-     jesomar.cuenca@gmail.com
+
+Date: 24/09/2021
+"""
 from utils import create_structure_for_ann
 import numpy as np
 
@@ -20,23 +27,14 @@ class NeuralNetwork:
     def _sigmoid(self, z):
         """
         Calculates the sigmoid for the elements in the array z
-        TODO: Implement the sigmoid function over the specified array z. The output should be of the same dimensions as z
         """
-        empty_z = np.ones(z.shape)
-        return empty_z
+        return 1/(1 + np.exp(-z))
 
     def _z(self, input, theta):
         """
         Calculates the net input for all neurons at a given layer
-        TODO Implement the net input formula (i.e., calculate z) for all neurons at a given layer.
-        theta is the numpy array with the weights for a given layer. Its dimensions would depend on the connections 
-        between the neurons, debug to know exactly and make your implementation correctly
-        You will return an k x m array, where k is the number of neurons in the current layer (k can be inferred from the theta parameter)
-        and m is the amount of examples in input parameter
         """
-        k = theta.shape[0]
-        m = input.shape[1]
-        return np.ones((k,m))
+        return np.dot(theta,input)
 
     def _activation(self, z):
         """
@@ -72,6 +70,7 @@ class NeuralNetwork:
             self.activations.append(a_i)
 
         self.activations.append(np.zeros((self.output_neurons, m)))
+        # print(self.activations)
 
     def _forward(self):
         # TODO: Implement the forward step. Remember that this involves calculating the activations in the next layer, one by one. 
@@ -82,7 +81,16 @@ class NeuralNetwork:
         # -- Make use of this class' activation function (which is linked to your implemented sigmoid)
         # Recall that the self.activations (a list of numpy arrays) is already configured to hold these values.
         #! DO NOT MODIFY THE FIRST POSITION AT EACH ACTIVATION LAYER, as we know it is the bias unit and it should be left equals to 1.
-        pass
+        
+        for layer in range(len(self.hidden_layers)):
+            layer_weights = self.theta[layer]
+            x = self.activations[layer]
+            self.activations[layer + 1][1:,:] = self._activation(self._z(x,layer_weights))
+
+        layer_weights = self.theta[-1]
+        x = self.activations[-2]
+
+        self.activations[-1] = self._activation(self._z(x,layer_weights))
 
     def predict(self, X):
         """
@@ -93,9 +101,7 @@ class NeuralNetwork:
         # Put the X dataset in the input layer
         self._initialize_activations(X)
 
-        # TODO Implement the following steps:
-        # -- Perform the forward pass and
-        # -- Return the last element in the list of activations, that is, 
-        # --   the numpy array that corresponds to the activations in the output layer
-        # --   remember that the list of activations is in self.activations
+        self._forward()
+
+        # return np.where(self.activations[-1] < 0.5, 0, 1)
         return self.activations[-1]
