@@ -22,8 +22,8 @@ class NeuralNetwork:
         Calculates the sigmoid for the elements in the array z
         TODO: Implement the sigmoid function over the specified array z. The output should be of the same dimensions as z
         """
-        empty_z = np.ones(z.shape)
-        return empty_z
+        sigm = 1 / (1 + np.exp(-z))
+        return sigm
 
     def _z(self, input, theta):
         """
@@ -34,9 +34,12 @@ class NeuralNetwork:
         You will return an k x m array, where k is the number of neurons in the current layer (k can be inferred from the theta parameter)
         and m is the amount of examples in input parameter
         """
-        k = theta.shape[0]
-        m = input.shape[1]
-        return np.ones((k,m))
+        # k = theta.shape[0]
+        # m = input.shape[1]
+        # print("input", input)
+        z_calc = np.dot(theta, input)
+
+        return np.dot(theta, input)
 
     def _activation(self, z):
         """
@@ -74,6 +77,7 @@ class NeuralNetwork:
         self.activations.append(np.zeros((self.output_neurons, m)))
 
     def _forward(self):
+        self._initialize_weights()
         # TODO: Implement the forward step. Remember that this involves calculating the activations in the next layer, one by one. 
         # After each calculation, you must leave in self.activations[someIndex] the calculated values.
         # Some points:
@@ -95,6 +99,7 @@ class NeuralNetwork:
 
         # TODO Implement the following steps:
         # -- Perform the forward pass and
+        self._forward()
         # -- Return the last element in the list of activations, that is, 
         # --   the numpy array that corresponds to the activations in the output layer
         # --   remember that the list of activations is in self.activations
