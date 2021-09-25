@@ -1,3 +1,13 @@
+"""
+Modified by:
+- Jesús Omar Cuenca Espino    A01378844
+- Luis Felipe Alvarez Sanchez A01194173
+- Juan José González Andrews  A01194101
+- Rodrigo Montemayor Faudoa   A00821976
+
+Date: 25/09/2021
+"""
+
 import matplotlib.pyplot as plt
 from ann import NeuralNetwork
 import numpy as np
