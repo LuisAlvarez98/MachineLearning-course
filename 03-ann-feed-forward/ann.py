@@ -39,7 +39,7 @@ class NeuralNetwork:
         # print("input", input)
         z_calc = np.dot(theta, input)
 
-        return np.dot(theta, input)
+        return z_calc
 
     def _activation(self, z):
         """
@@ -77,7 +77,12 @@ class NeuralNetwork:
         self.activations.append(np.zeros((self.output_neurons, m)))
 
     def _forward(self):
-        self._initialize_weights()
+        for i in range(0, len(self.hidden_layers) + 1):
+            z = self._z(self.activations[i], self.theta[i])
+            if len(self.hidden_layers) != i:
+                self.activations[i + 1][1 : ] = self._activation(z)
+            else:
+                self.activations[i + 1] = self._activation(z)
         # TODO: Implement the forward step. Remember that this involves calculating the activations in the next layer, one by one. 
         # After each calculation, you must leave in self.activations[someIndex] the calculated values.
         # Some points:
