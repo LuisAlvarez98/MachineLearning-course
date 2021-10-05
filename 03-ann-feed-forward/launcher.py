@@ -1,11 +1,14 @@
 """
 Modified by:
-- Jesús Omar Cuenca Espino    A01378844
 - Luis Felipe Alvarez Sanchez A01194173
 - Juan José González Andrews  A01194101
 - Rodrigo Montemayor Faudoa   A00821976
 
-Date: 25/09/2021
+Modified/Updated by:
+- Jesús Omar Cuenca Espino (JOmarCuenca)
+-     jesomar.cuenca@gmail.com
+
+Date: 24/09/2021
 """
 
 import matplotlib.pyplot as plt
@@ -33,6 +36,9 @@ def run_for_dataset(dataset, hidden_layers_conf, theta_config, examples):
 
     plot_decision_boundary(
         X.T, y.T, ann, title="ANN dataset={}".format(dataset))
+
+    # For separation in console
+    print('')
 
 def theta_config_for_xnor():
     #
@@ -159,10 +165,11 @@ def theta_config_for_circles():
     ]
     return theta_config
 
-if __name__ == "__main__":
+def printTitle(s : str):
+    print((' '+s+' ').upper().center(50,'+'))
 
-    # For XNOR dataset
-    print('XNOR dataset')
+def runXnor():
+    printTitle('XNOR dataset')
     dataset = './datasets/xnor.csv'
     hidden_layers_conf = [2]
     theta_config = theta_config_for_xnor()
@@ -173,9 +180,9 @@ if __name__ == "__main__":
     to_predict.append(np.array([[1, 1]]).T)
     
     run_for_dataset(dataset, hidden_layers_conf, theta_config, to_predict)
-    
-    # For blobs dataset
-    print('blobs dataset')
+
+def runBlobs():
+    printTitle('Blobs dataset')
     dataset = './datasets/blobs.csv'
     hidden_layers_conf = [2, 5]
     theta_config = theta_config_for_blobs()
@@ -186,8 +193,8 @@ if __name__ == "__main__":
     to_predict.append(np.array([[-9, 4.5]]).T)
     run_for_dataset(dataset, hidden_layers_conf, theta_config, to_predict)
 
-    # For moons dataset
-    print('Moons dataset')
+def runMoons():
+    printTitle('Moons dataset')
     dataset = './datasets/moons.csv'
     hidden_layers_conf = [4,4,4]
     theta_config = theta_config_for_moons()
@@ -198,8 +205,8 @@ if __name__ == "__main__":
     to_predict.append(np.array([[1.5, -0.5]]).T)
     run_for_dataset(dataset, hidden_layers_conf, theta_config, to_predict)
 
-    # For circles dataset
-    print('Circles dataset')
+def runCircles():
+    printTitle('Circles dataset')
     dataset = './datasets/circles.csv'
     hidden_layers_conf = [9,9,9]
     theta_config = theta_config_for_circles()
@@ -207,5 +214,19 @@ if __name__ == "__main__":
     to_predict.append(np.array([[-0.6, -0.85]]).T)
     to_predict.append(np.array([[0.75, -0.06]]).T)
     run_for_dataset(dataset, hidden_layers_conf, theta_config, to_predict)
+
+if __name__ == "__main__":
+
+    # For XNOR dataset
+    runXnor()
+    
+    # For blobs dataset
+    runBlobs()
+
+    # For moons dataset
+    runMoons()
+
+    # For circles dataset
+    runCircles()
 
     plt.show()
