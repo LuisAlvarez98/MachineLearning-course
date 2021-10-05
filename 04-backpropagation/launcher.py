@@ -35,6 +35,8 @@ def run_for_dataset(dataset, hidden_layers_conf, examples, learning_rate=0.01, r
     plot_decision_boundary(
         X.T, y.T, ann, title="ANN dataset={}".format(dataset))
 
+    print('\n')
+
 
 def get_config_for_example():
     X = np.array([[0.05], [0.10]])
@@ -65,11 +67,11 @@ def get_config_for_example():
 
     return (X, y, hidden, theta)
 
+def printTitle(s : str):
+    print((' '+s+' ').upper().center(50,'+'))
 
-if __name__ == "__main__":
-
-    # For example dataset
-    print('Example dataset')
+def runExample():
+    printTitle('Example dataset')
     X, y, hidden_layers_conf, theta = get_config_for_example()
     example = np.array([[0.05, 0.1]]).T
 
@@ -86,11 +88,10 @@ if __name__ == "__main__":
     ann.fit(X, y, theta)
 
     r = ann.predict(example)
-    print("{} predicted as {}".format(example.T, r.T))
-        
+    print("{} predicted as {}\n\n".format(example.T, r.T))
 
-    # For XOR dataset
-    print('XOR dataset')
+def runXOR():
+    printTitle('XOR dataset')
     np.random.seed(0)
     dataset = './datasets/xor.csv'
     hidden_layers_conf = [6,6]
@@ -105,9 +106,8 @@ if __name__ == "__main__":
 
     run_for_dataset(dataset, hidden_layers_conf, to_predict, learning_rate=alpha, regularization_rate=reg_factor, epochs=epochs)
 
-
-    # For blobs dataset
-    print('blobs dataset')
+def runBlobs():
+    printTitle('blobs dataset')
     np.random.seed(5)
     dataset = './datasets/blobs.csv'
     hidden_layers_conf = [2,5]
@@ -121,9 +121,8 @@ if __name__ == "__main__":
 
     run_for_dataset(dataset, hidden_layers_conf, to_predict, learning_rate=alpha, regularization_rate=reg_factor, epochs=epochs)
 
-    
-    # For moons dataset
-    print('Moons dataset')
+def runMoons():
+    printTitle('Moons dataset')
     np.random.seed(0)
     dataset = './datasets/moons.csv'
     hidden_layers_conf = [4,4,4]
@@ -138,8 +137,8 @@ if __name__ == "__main__":
 
     run_for_dataset(dataset, hidden_layers_conf, to_predict, learning_rate=alpha, regularization_rate=reg_factor, epochs=epochs)
 
-    # For circles dataset
-    print('circles dataset')
+def runCircles():
+    printTitle('circles dataset')
     np.random.seed(0)
     dataset = './datasets/circles.csv'
     hidden_layers_conf = [9,9,9]
@@ -151,5 +150,25 @@ if __name__ == "__main__":
     to_predict.append(np.array([[0.75, -0.06]]).T)
 
     run_for_dataset(dataset, hidden_layers_conf, to_predict, learning_rate=alpha, regularization_rate=reg_factor, epochs=epochs)
+
+if __name__ == "__main__":
+
+    # For example dataset
+    runExample()
+        
+
+    # For XOR dataset
+    runXOR()
+
+
+    # For blobs dataset
+    runBlobs()
+
+    
+    # # For moons dataset
+    # runMoons()
+
+    # # For circles dataset
+    # runCircles()
 
     plt.show()

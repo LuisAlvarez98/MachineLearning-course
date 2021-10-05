@@ -10,6 +10,10 @@ Date: 05/10/2021
 
 from utils import create_structure_for_ann
 import numpy as np
+from progressbar import progressbar, streams
+
+# Setup Progressbar
+streams.wrap_stderr()
 
 
 class NeuralNetwork:
@@ -30,18 +34,12 @@ class NeuralNetwork:
     def _sigmoid(self, z):
         """
         Calculates the sigmoid for the elements in the array z
-        OLD_TODO: Implement the sigmoid function over the specified array z. The output should be of the same dimensions as z
         """
         return 1 / (1 + np.exp(-z))
 
     def _z(self, input, theta):
         """
         Calculates the net input for all neurons at a given layer
-        OLD_TODO Implement the net input formula (i.e., calculate z) for all neurons at a given layer.
-        theta is the numpy array with the weights for a given layer. Its dimensions would depend on the connections 
-        between the neurons, debug to know exactly and make your implementation correctly
-        You will return an k x m array, where k is the number of neurons in the current layer (k can be inferred from the theta parameter)
-        and m is the amount of examples in input parameter
         """
         return theta @ input
 
@@ -191,7 +189,7 @@ class NeuralNetwork:
         self.costs = []
 
         # Perform the training
-        for _ in range(self.epochs):
+        for _ in progressbar(range(self.epochs)):
             self._forward()
             cost = self._cost_function(y)
             self.costs.append(cost)
