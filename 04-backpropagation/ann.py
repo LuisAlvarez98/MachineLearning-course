@@ -29,7 +29,7 @@ class NeuralNetwork:
         self.epochs = epochs
         self.costs = None
         self.theta = None
-        self.activations = None
+        self.activations : np.ndarray = None
 
     def _sigmoid(self, z):
         """
@@ -100,7 +100,7 @@ class NeuralNetwork:
         a_next = self._activation(z_next)
         self.activations[i+2] = a_next
 
-    def _backprop(self, y):
+    def _backprop(self, y : np.ndarray):
         # TODO Implement the back prop step. This fun does not produce output, it should at the end update the weights in self.theta
         # Hints: 
         # - You can get m from y parameter
@@ -117,12 +117,11 @@ class NeuralNetwork:
         # - Some code and comments are provided here as a starting point, but you can delete it and use your own
         
         
-        # m = y.shape[1]
-        # delta = []
+        m = y.shape[1]
+        delta = []
 
         # calculate the error in output layer and append it to delta
-        # delta_i = something
-        # delta.append(delta_i)
+        delta.append(y - self.activations[-1])
 
         # Iterate backwards for each layer, we stop at layer 1 (excluding it)
         # for each layer going backwards:
@@ -163,15 +162,41 @@ class NeuralNetwork:
         # return np.argmax(predicted, axis=0)
         return predicted
 
-    def _cost_function(self, y):
-        # TODO: Implement the cost function seen in class, indeed it is with regularization. 
-        # TODO: You should implement a vectorized version, for loops are not needed.
-        # TODO: Cost function always returns a scalar
+    def _cost_function(self, y : np.ndarray) -> float:
+        """
+        Calculates the Cost of the current state of the ANN.
+
+        Args:
+            y (np.ndarray): Correct Values
+
+        Returns:
+            float: Cost
+        """
         # Hints: 
         # - the predictions (y_pred in previous assignments) are in the activations of last layer, you can access them via self.activations
         # - you can get the value of m (number of examples) from the y parameter
         # - do not forget: We do not regularize the bias units weights
-        return 0
+
+        m = y.shape[1]
+
+        y_pred = (self.activations[-1]).T
+
+        part1 = np.log(y_pred) @ y
+        part2 = np.log(1 - y_pred) @ (1 - y)
+
+        # Cost without Regularization
+        result = (-1/m) * np.sum(part1 + part2)
+
+        regularization = 0
+
+        for layer in self.theta:
+            biasless = layer[:, 1:]
+            temp = biasless @ biasless.T
+            regularization += np.sum(temp)
+
+        result += (self.regularization_rate / (2 * m)) * regularization
+
+        return result
 
     def fit(self, X, y, initialTheta=None):
         """
