@@ -1,9 +1,9 @@
 """
 Modified by:
-- Jesús Omar Cuenca Espino    A01378844
-- Luis Felipe Alvarez Sanchez A01194173
-- Juan José González Andrews  A01194101
-- Rodrigo Montemayor Faudoa   A00821976
+>> Jesús Omar Cuenca Espino    A01378844
+>> Luis Felipe Alvarez Sanchez A01194173
+>> Juan José González Andrews  A01194101
+>> Rodrigo Montemayor Faudoa   A00821976
 
 Date: 05/10/2021
 """
@@ -115,13 +115,12 @@ class NeuralNetwork:
         # - Remember, here we don't update the weights coming from bias unit, you can use slicing [1:], [:,:1], etc to select the 
         #   portions of the arrays you want to update.
         # - Some code and comments are provided here as a starting point, but you can delete it and use your own
+        # return 0
         
-        
-        m = y.shape[1]
         delta = []
 
         # calculate the error in output layer and append it to delta
-        delta.append(y - self.activations[-1])
+        delta.append(self.activations[-1] - y)
 
         # Iterate backwards for each layer, we stop at layer 1 (excluding it)
         # for each layer going backwards:
@@ -129,17 +128,48 @@ class NeuralNetwork:
         #   multiply the previous together and also by the sigmoid derivative
         #     (that is a * (1 - a), you must select the correct activations here)
         #   at this point you got the deltas for this layer, appendit to delta list
+        for layer in reversed(range(1, len(self.activations) - 1)):
+            lastDelta   = delta[-1]
+            biasslessWeight = self.theta[layer][:,1:].T
+            firstPart   = biasslessWeight @ lastDelta
+            a = self.activations[layer][1:]
+            secondPart  = a * (1 - a)
+            newDelta = firstPart * secondPart
+            delta.append(newDelta)
+
+        # delta.append(self.activations[0])
+
+        delta.reverse()
         
 
         # Create your Delta Δ matrix
-        # Delta = create_structure_for_ann(self)
+        Delta : list = create_structure_for_ann(self)
         # Compute Δ = Δ + activations*delta_next_layer
+
+        for value in reversed(range(len(Delta))):
+            # newValue = (self.activations[value][1:] * delta[value].T)
+            newValue = (self.activations[value][1:] @ delta[value].T)
+            Delta[value][:, 1:] = newValue.T
         
 
         # Create matrix D from Δ matrix, there is some regularization here
 
         # Use D for gradient descent's update rule, no update for weights from bias units to match PDF results
-        pass
+        m = y.shape[1]
+        D = []
+        for val in range(len(Delta)):
+            value = Delta[val]/m
+            if(val != 0):
+                value += self.regularization_rate * self.theta[val]
+            D.append(value)
+
+        assert len(self.theta) == len(D)
+
+        for val in range(len(self.theta)):
+            biasslessWeight = self.theta[val][:, 1:]
+            temp = biasslessWeight - self.learning_rate*D[val][:, 1:]
+            self.theta[val][:, 1:] = temp
+
 
     def predict(self, X):
         """
@@ -217,6 +247,9 @@ class NeuralNetwork:
         for _ in progressbar(range(self.epochs)):
             self._forward()
             cost = self._cost_function(y)
+            # if(len(self.costs) > 0 and cost > self.costs[-1]):
+            #     print("Fuck")
+            #     break
             self.costs.append(cost)
             self._backprop(y)
 
