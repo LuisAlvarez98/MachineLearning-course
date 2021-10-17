@@ -54,7 +54,7 @@ def create_structure(num_classes, num_features, hidden_layers_conf):
     return weights
 
 
-def create_structure_for_ann(ann):
+def create_structure_for_ann(ann) -> list:
     """
     This function returns a structure to hold the weights or Deltas of the specified ann
     """

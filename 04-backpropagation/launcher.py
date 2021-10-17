@@ -157,18 +157,18 @@ if __name__ == "__main__":
     runExample()
         
 
-    # # For XOR dataset
-    # runXOR()
+    # For XOR dataset
+    runXOR()
 
 
-    # # For blobs dataset
-    # runBlobs()
+    # For blobs dataset
+    runBlobs()
 
     
-    # # For moons dataset
-    # runMoons()
+    # For moons dataset
+    runMoons()
 
-    # # For circles dataset
-    # runCircles()
+    # For circles dataset
+    runCircles()
 
     plt.show()
