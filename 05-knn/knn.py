@@ -24,7 +24,7 @@ class Knn:
         # Remember thatin self.model_x you have your list of examples
         distances = []
 
-        for i in self.model_x:
+        for i in self.model_x.T:
             distances.append(self.euclidean_distance(i, example))
         
         neighbor_indices = np.array(distances).argsort()[:self.k]
