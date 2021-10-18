@@ -24,7 +24,7 @@ class Knn:
         # Remember thatin self.model_x you have your list of examples
         distances = []
 
-        for i in self.model_x:
+        for i in self.model_x.T:
             distances.append(self.euclidean_distance(i, example))
         
         neighbor_indices = np.array(distances).argsort()[:self.k]
@@ -48,4 +48,4 @@ class Knn:
         # Do your research to find numpy or python functions that allow to sort and count
         # In self.model_y you will have the list of the classes for examples in original dataset (self.model_x). self.model_y is of shape 1xm
         neighbor_indices = self.get_neighbors(example)
-        return 0
+        return neighbor_indices
