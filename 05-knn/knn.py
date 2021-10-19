@@ -23,8 +23,9 @@ class Knn:
     def euclidean_distance(self, example1, example2):
         # TODO: Implement the euclidean distance function to calculate the distance between the provided elements
         # The output should be a scalar
-        distance = np.linalg.norm(example1 - example2,axis=1)
-        return distance
+        temp = example1 - example2
+        distance = temp @ temp.T
+        return np.sqrt(distance)
 
     def get_neighbors(self, example):
         # TODO: Implement this function to obtain the k nearest neighbours for the provided example
@@ -56,5 +57,5 @@ class Knn:
         # For each example, you will need to get the indexes of nearest neighbours and then the voting.
         # Do your research to find numpy or python functions that allow to sort and count
         # In self.model_y you will have the list of the classes for examples in original dataset (self.model_x). self.model_y is of shape 1xm
-        neighbor_indices = self.get_neighbors(example)
-        return 0
+        temp = self.get_neighbors(example)
+        return temp
