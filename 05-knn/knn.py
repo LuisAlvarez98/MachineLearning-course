@@ -23,7 +23,7 @@ class Knn:
     def euclidean_distance(self, example1, example2):
         # TODO: Implement the euclidean distance function to calculate the distance between the provided elements
         # The output should be a scalar
-        return np.sqrt(np.sum((example1 - example2)**2))
+        return np.sqrt(np.sum((example1 - example2.T)**2))
 
     def get_neighbors(self, example):
         # TODO: Implement this function to obtain the k nearest neighbours for the provided example
