@@ -1,6 +1,15 @@
+"""
+Modified by:
+- Jesús Omar Cuenca Espino    A01378844
+- Luis Felipe Alvarez Sanchez A01194173
+- Juan José González Andrews  A01194101
+- Rodrigo Montemayor Faudoa   A00821976
+
+Date: 18/10/2021
+"""
 
 import numpy as np
-
+from collections import Counter
 
 class Knn:
     def __init__(self, k):
@@ -14,22 +23,26 @@ class Knn:
     def euclidean_distance(self, example1, example2):
         # TODO: Implement the euclidean distance function to calculate the distance between the provided elements
         # The output should be a scalar
-        distance = np.linalg.norm(example1 - example2,axis=1)
-        return distance
+        return np.sqrt(np.sum((example1 - example2.T)**2))
 
     def get_neighbors(self, example):
         # TODO: Implement this function to obtain the k nearest neighbours for the provided example
         # You must return an np array of shape 1 x k, each element must be the index of the neighbour so you can associate it with its class/label later.
         # You will need to calculate  the distance and then sort, recalling the indexes. Do your research to find a method that allows this.
         # Remember thatin self.model_x you have your list of examples
+<<<<<<< HEAD
         distances = []
 
         for i in self.model_x.T:
             distances.append(self.euclidean_distance(i, example))
+=======
+        distances = [ self.euclidean_distance(i, example) for i in self.model_x.T ]
+>>>>>>> 25ace378ddc3f1ef58f7f764b03a66eefd825f29
         
-        neighbor_indices = np.array(distances).argsort()[:self.k]
+        neighbor_indices    = np.argsort(distances)[:self.k]
+        neighbor_labels     = [ self.model_y[0][i] for i in neighbor_indices ]
 
-        return neighbor_indices
+        return Counter(neighbor_labels).most_common(1)[0][0]
 
     def fit(self, X, y):
         """
@@ -48,4 +61,4 @@ class Knn:
         # Do your research to find numpy or python functions that allow to sort and count
         # In self.model_y you will have the list of the classes for examples in original dataset (self.model_x). self.model_y is of shape 1xm
         neighbor_indices = self.get_neighbors(example)
-        return 0
+        return neighbor_indices
